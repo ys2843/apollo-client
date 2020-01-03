@@ -1,5 +1,7 @@
 import { ExecutionResult, DocumentNode } from 'graphql';
 import { invariant, InvariantError } from 'ts-invariant';
+import {of} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 import { ApolloLink } from '../link/core/ApolloLink';
 import { execute } from '../link/core/execute';
@@ -986,7 +988,7 @@ export class QueryManager<TStore> {
         {},
         variables,
         false,
-      ).map(result => {
+      ).pipe(map(result => {
         if (!fetchPolicy || fetchPolicy !== 'no-cache') {
           // the subscription interface should handle not sending us results we no longer subscribe to.
           // XXX I don't think we ever send in an object with errors, but we might in the future...
@@ -1009,7 +1011,7 @@ export class QueryManager<TStore> {
         }
 
         return result;
-      });
+      }));
 
     if (this.transform(query).hasClientExports) {
       const observablePromise = this.localState.addExportedVariables(
@@ -1194,7 +1196,7 @@ export class QueryManager<TStore> {
         observable = multiplex(execute(link, operation) as Observable<FetchResult<T>>);
       }
     } else {
-      observable = Observable.of({ data: {} } as FetchResult<T>);
+      observable = of({ data: {} } as FetchResult<T>);
       context = this.prepareContext(context);
     }
 
@@ -1250,7 +1252,7 @@ export class QueryManager<TStore> {
         });
       };
 
-      const subscription = observable.map((result: ExecutionResult) => {
+      const subscription = observable.pipe(map((result: ExecutionResult) => {
         if (requestId >= this.getQuery(queryId).lastRequestId) {
           this.markQueryResult(
             queryId,
@@ -1298,7 +1300,7 @@ export class QueryManager<TStore> {
             resultFromStore = result;
           }
         }
-      }).subscribe({
+      })).subscribe({
         error(error: ApolloError) {
           cleanup();
           reject(error);

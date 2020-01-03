@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { DocumentNode } from 'graphql';
 
-import { Observable } from '../../utilities/observables/Observable';
+import { Observable, Subscription } from '../../utilities/observables/Observable';
 import { FetchResult } from '../../link/core/types';
 import { ApolloClient } from '../../ApolloClient';
 import {
@@ -115,7 +115,7 @@ export interface QueryPreviousData<TData, TVariables> {
 
 export interface QueryCurrentObservable<TData, TVariables> {
   query?: ObservableQuery<TData, TVariables> | null;
-  subscription?: ZenObservable.Subscription;
+  subscription?: Subscription;
 }
 
 export interface QueryLazyOptions<TVariables> {
@@ -245,5 +245,5 @@ export interface SubscriptionDataOptions<
 
 export interface SubscriptionCurrentObservable {
   query?: Observable<any>;
-  subscription?: ZenObservable.Subscription;
+  subscription?: Subscription;
 }

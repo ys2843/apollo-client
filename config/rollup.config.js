@@ -21,7 +21,8 @@ const globals = {
   '@wry/equality': 'wryEquality',
   graphql: 'graphql',
   react: 'React',
-  'zen-observable': 'Observable',
+  rxjs: 'rxjs',
+  'rxjs/operators': 'rxjs.operators',
 };
 
 const hasOwn = Object.prototype.hasOwnProperty;
